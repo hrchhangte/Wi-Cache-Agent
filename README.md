@@ -10,3 +10,5 @@ Also, to build the Odin agent follow the instructions provided here: [Build Odin
 
 To build and run Wi-Cache-Agent (CacheAgentMain.cpp, CacheAgentMain.h) using eclipse, following the instructions provided here ([eclipse-openwrt](https://github.com/hrchhangte/Wi-Cache-Agent/blob/master/eclipse-openwrt%20setup.pdf))
 
+To run the Wi-Cache-Agent, Odin agent, run the [start.sh]() on the Wi-Cache AP.
+
