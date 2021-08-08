@@ -12,3 +12,7 @@ To build and run Wi-Cache-Agent (CacheAgentMain.cpp, CacheAgentMain.h) using ecl
 
 To run the Wi-Cache-Agent, Odin agent, run the [start.sh](https://github.com/hrchhangte/Wi-Cache-Agent/blob/master/scripts_start_ap_odin/start.sh) on the Wi-Cache AP.
 
+**Photo of our setup with 2 Wi-Cache APs**
+
+[]
+
