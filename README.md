@@ -14,5 +14,5 @@ To run the Wi-Cache-Agent, Odin agent, run the [start.sh](https://github.com/hrc
 
 **Photo of our setup with 2 Wi-Cache APs**
 
-[]
+[Setup with 2 TP-Link AC1750 v2 (Archer C7) routers](https://github.com/hrchhangte/Wi-Cache-Agent/blob/master/IMG_20160714_001115.jpg)
 
