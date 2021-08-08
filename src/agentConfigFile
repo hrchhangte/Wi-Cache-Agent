@@ -1,0 +1,5 @@
+ctrAddr 192.168.1.145
+ctrPort 8000
+ctrUdpPort 7000
+dataTransProto tcp
+clntDataPort 9001
