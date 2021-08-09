@@ -1,0 +1,133 @@
+# 16 "r.cli"
+odinagent :: OdinAgent(HWADDR F4:F2:6D:70:82:2B, RT rates, CHANNEL 11, DEFAULT_GW 192.168.1.10, DEBUGFS /sys/kernel/debug/ieee80211/phy0/ath9k/bssid_extra, SSIDAGENT odin-bssid-test, DEBUG_ODIN 2, TX_RATE 108, TX_POWER 24, HIDDEN 0, MULTICHANNEL_AGENTS 0, DEFAULT_BEACON_INTERVAL 100, BURST_BEACON_INTERVAL 10, BURST 10, MEASUREMENT_BEACON_INTERVAL 100, CAPTURE_MODE 0, MAC_CAPTURE FF:FF:FF:FF:FF:FF);
+# 19 "r.cli"
+TimedSource@2 :: TimedSource(2, "ping
+");
+# 19 "r.cli"
+odinsocket :: Socket(UDP, 192.168.1.251, 2819, CLIENT true);
+# 25 "r.cli"
+rates :: AvailableRates(DEFAULT 12 18 24 36 48 72 96 108);
+# 25 "r.cli"
+control :: ControlSocket("TCP", 6777);
+# 27 "r.cli"
+chatter :: ChatterSocket("TCP", 6778);
+# 30 "r.cli"
+FromHost@7 :: FromHost(ap, HEADROOM 50);
+# 37 "r.cli"
+fhcl :: Classifier(12/0806 20/0001, -);
+# 38 "r.cli"
+ARPPrint@9 :: ARPPrint("[Click] ARP request from host to resolve STA's ARP");
+# 43 "r.cli"
+fh_arpr :: ARPResponder(192.168.1.11 74:F0:6D:20:D4:74);
+# 43 "r.cli"
+ARPPrint@11 :: ARPPrint("[Click] Resolving client's ARP by myself");
+# 45 "r.cli"
+ToHost@12 :: ToHost(ap);
+# 49 "r.cli"
+Print@13 :: Print("[Click] Non-ARP request from host goes to Odin agent port 1");
+# 54 "r.cli"
+Print@14 :: Print("[Click] ARP request to another STA goes to Odin agent port 1");
+# 57 "r.cli"
+q :: Queue(500);
+# 59 "r.cli"
+SetTXRate@16 :: SetTXRate(108);
+# 59 "r.cli"
+RadiotapEncap@17 :: RadiotapEncap;
+# 61 "r.cli"
+to_dev :: ToDevice(mon0);
+# 66 "r.cli"
+q2 :: Queue(500);
+# 68 "r.cli"
+SetTXRate@20 :: SetTXRate(108);
+# 68 "r.cli"
+RadiotapEncap@21 :: RadiotapEncap;
+# 70 "r.cli"
+to_dev2 :: ToDevice(mon1);
+# 76 "r.cli"
+from_dev :: FromDevice(mon0, HEADROOM 500);
+# 78 "r.cli"
+RadiotapDecap@24 :: RadiotapDecap;
+# 79 "r.cli"
+ExtraDecap@25 :: ExtraDecap;
+# 80 "r.cli"
+phyerr_filter :: FilterPhyErr;
+# 81 "r.cli"
+tx_filter :: FilterTX;
+# 82 "r.cli"
+dupe :: WifiDupeFilter;
+# 86 "r.cli"
+from_dev1 :: FromDevice(mon1, HEADROOM 500);
+# 88 "r.cli"
+RadiotapDecap@30 :: RadiotapDecap;
+# 89 "r.cli"
+ExtraDecap@31 :: ExtraDecap;
+# 90 "r.cli"
+phyerr_filter1 :: FilterPhyErr;
+# 91 "r.cli"
+tx_filter1 :: FilterTX;
+# 92 "r.cli"
+dupe1 :: WifiDupeFilter;
+# 101 "r.cli"
+decap :: WifiDecap;
+# 101 "r.cli"
+RXStats@36 :: RXStats;
+# 101 "r.cli"
+arp_c :: Classifier(12/0806 20/0001, -);
+# 106 "r.cli"
+Print@38 :: Print("[Click] ARP request from the STA");
+# 106 "r.cli"
+arp_resp :: ARPResponder(192.168.1.10 F4:F2:6D:70:82:2B);
+# 106 "r.cli"
+Print@40 :: Print("[Click] ARP fast path for STA: the STA is asking for the MAC address of the AP");
+# 120 "r.cli"
+Print@41 :: Print("[Click] Non-ARP packet in arp_c classifier");
+# 121 "r.cli"
+ToHost@42 :: ToHost(ap);
+# 128 "r.cli"
+Print@43 :: Print("[Click] ARP Fast path fail");
+# 129 "r.cli"
+ToHost@44 :: ToHost(ap);
+# 91 ""
+TimedSource@2 -> odinsocket;
+odinagent [3] -> odinsocket;
+FromHost@7 -> fhcl
+    -> ARPPrint@9
+    -> fh_arpr
+    -> ARPPrint@11
+    -> ToHost@12;
+fhcl [1] -> Print@13
+    -> [1] odinagent;
+fh_arpr [1] -> Print@14
+    -> [1] odinagent;
+odinagent [2] -> q
+    -> SetTXRate@16
+    -> RadiotapEncap@17
+    -> to_dev;
+odinagent [4] -> q2
+    -> SetTXRate@20
+    -> RadiotapEncap@21
+    -> to_dev2;
+from_dev -> RadiotapDecap@24
+    -> ExtraDecap@25
+    -> phyerr_filter
+    -> tx_filter
+    -> dupe
+    -> odinagent
+    -> q;
+from_dev1 -> RadiotapDecap@30
+    -> ExtraDecap@31
+    -> phyerr_filter1
+    -> tx_filter1
+    -> dupe1
+    -> [2] odinagent;
+odinagent [1] -> decap
+    -> RXStats@36
+    -> arp_c
+    -> Print@38
+    -> arp_resp
+    -> Print@40
+    -> [1] odinagent;
+arp_c [1] -> Print@41
+    -> ToHost@42;
+arp_resp [1] -> Print@43
+    -> ToHost@44;

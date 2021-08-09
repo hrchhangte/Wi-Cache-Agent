@@ -1,0 +1,95 @@
+# 17 "r.cli"
+odinagent :: OdinAgent(HWADDR F4:F2:6D:70:82:2B, RT rates, CHANNEL 11, DEFAULT_GW 192.168.1.10, DEBUGFS /sys/kernel/debug/ieee80211/phy0/ath9k/bssid_extra, SSIDAGENT odin-bssid-test-1, DEBUG_ODIN 2, TX_RATE 108, TX_POWER 24, HIDDEN 0, MULTICHANNEL_AGENTS 1, DEFAULT_BEACON_INTERVAL 100, BURST_BEACON_INTERVAL 10, MEASUREMENT_BEACON_INTERVAL 100);
+# 20 "r.cli"
+TimedSource@2 :: TimedSource(2, "ping
+");
+# 20 "r.cli"
+odinsocket :: Socket(UDP, 192.168.1.145, 2819, CLIENT true);
+# 26 "r.cli"
+rates :: AvailableRates(DEFAULT 12 18 24 36 48 72 96 108);
+# 26 "r.cli"
+control :: ControlSocket("TCP", 6777);
+# 28 "r.cli"
+chatter :: ChatterSocket("TCP", 6778);
+# 31 "r.cli"
+FromHost@7 :: FromHost(ap, HEADROOM 50);
+# 38 "r.cli"
+# 39 "r.cli"
+# 39 "r.cli"
+# 54 "r.cli"
+q :: Queue(500);
+# 56 "r.cli"
+SetTXRate@12 :: SetTXRate(108);
+# 56 "r.cli"
+RadiotapEncap@13 :: RadiotapEncap;
+# 58 "r.cli"
+to_dev :: ToDevice(mon0);
+# 63 "r.cli"
+q2 :: Queue(500);
+# 65 "r.cli"
+SetTXRate@16 :: SetTXRate(108);
+# 65 "r.cli"
+RadiotapEncap@17 :: RadiotapEncap;
+# 67 "r.cli"
+to_dev2 :: ToDevice(mon1);
+# 73 "r.cli"
+from_dev :: FromDevice(mon0, HEADROOM 50);
+# 75 "r.cli"
+RadiotapDecap@20 :: RadiotapDecap;
+# 76 "r.cli"
+ExtraDecap@21 :: ExtraDecap;
+# 77 "r.cli"
+phyerr_filter :: FilterPhyErr;
+# 78 "r.cli"
+tx_filter :: FilterTX;
+# 79 "r.cli"
+dupe :: WifiDupeFilter;
+# 83 "r.cli"
+from_dev1 :: FromDevice(mon1, HEADROOM 50);
+# 85 "r.cli"
+RadiotapDecap@26 :: RadiotapDecap;
+# 86 "r.cli"
+ExtraDecap@27 :: ExtraDecap;
+# 87 "r.cli"
+phyerr_filter1 :: FilterPhyErr;
+# 88 "r.cli"
+tx_filter1 :: FilterTX;
+# 89 "r.cli"
+dupe1 :: WifiDupeFilter;
+# 98 "r.cli"
+decap :: WifiDecap;
+# 98 "r.cli"
+RXStats@32 :: RXStats;
+# 98 "r.cli"
+# 103 "r.cli"
+# 115 "r.cli"
+# 122 "r.cli"
+ToHost@36 :: ToHost(ap);
+# 75 ""
+TimedSource@2 -> odinsocket;
+odinagent [3] -> odinsocket;
+FromHost@7 -> [1] odinagent
+odinagent [2] -> q
+    -> SetTXRate@12
+    -> RadiotapEncap@13
+    -> to_dev;
+odinagent [4] -> q2
+    -> SetTXRate@16
+    -> RadiotapEncap@17
+    -> to_dev2;
+from_dev -> RadiotapDecap@20
+    -> ExtraDecap@21
+    -> phyerr_filter
+    -> tx_filter
+    -> dupe
+    -> odinagent
+    -> q;
+from_dev1 -> RadiotapDecap@26
+    -> ExtraDecap@27
+    -> phyerr_filter1
+    -> tx_filter1
+    -> dupe1
+    -> [2] odinagent;
+odinagent [1] -> decap
+    -> RXStats@32
+    -> ToHost@36;
