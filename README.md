@@ -10,7 +10,12 @@ Also, to build the Odin agent follow the instructions provided here: [Build Odin
 
 To build and run Wi-Cache-Agent (CacheAgentMain.cpp, CacheAgentMain.h) using eclipse, following the instructions provided here ([eclipse-openwrt](https://github.com/hrchhangte/Wi-Cache-Agent/blob/master/eclipse-openwrt%20setup.pdf))
 
-To run the Wi-Cache-Agent, Odin agent, run the [start.sh](https://github.com/hrchhangte/Wi-Cache-Agent/blob/master/scripts_start_ap_odin/start.sh) on the Wi-Cache AP.
+To run the Wi-Cache-Agent, Odin agent, run the scripts provided in [scripts_start_ap_Wi-Cache](https://github.com/hrchhangte/Wi-Cache-Agent/tree/master/scripts_start_ap_Wi-Cache) on the Wi-Cache AP. An example scripts that can be run on two different Wi-Cache APs with IP addresses 192.168.1.10 and 192.168.1.12 are provided for reference.
+
+Run the scripts in the following order.
+
+1. flow.sh (This adds the necessary flows on the vSwitch, should be adapted for the MACs of the clients) <br />
+2. start.sh (This makes additional configurations and start the Click router and WiCacheAP)
 
 **Photo of our setup with 2 Wi-Cache APs**
 
