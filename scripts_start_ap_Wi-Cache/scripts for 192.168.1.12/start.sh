@@ -102,3 +102,6 @@ ip link set dev ap mtu 1400
 ip link set dev br0 mtu 1400                                                  
                                                                               
 chmod -R 777 /mnt      
+
+./WicacheAP &
+sleep 1
