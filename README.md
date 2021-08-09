@@ -1,6 +1,6 @@
 # Wi-Cache-Agent, W-Cache APs
 
-Wi-Cache-Agent runs alongside the Odin agent on Wi-Cache APs. Currently the WiFi AP that is used as Wi-Cache AP is
+Wi-Cache-Agent runs alongside the [Odin agent](https://github.com/Wi5/odin-wi5-agent) on Wi-Cache APs. Currently the WiFi AP that is used as Wi-Cache AP is
 
 * TP-Link AC1750 v2 (Archer C7). More information: https://wiki.openwrt.org/toh/tp-link/archer-c5-c7-wdr7500
 
